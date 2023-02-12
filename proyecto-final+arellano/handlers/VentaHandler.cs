@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace proyecto_final_arellano.handlers
 {
-    internal class VentaHandler
+    internal static class VentaHandler
     {
         public static string cadenaConexion = "Data Source=Lauri;Initial Catalog=SistemaGestion;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
         public static List<Venta> ObtenerVentas(long idUsuario)
@@ -28,9 +28,9 @@ namespace proyecto_final_arellano.handlers
                     while (reader.Read())
                     {
                         Venta venta = new Venta();
-                        venta.Id = reader.GetInt64();
+                        venta.Id = reader.GetInt64(0);
                         venta.Comentarios = reader.GetString(1);
-                        
+
 
                         ventas.Add(venta);
                     }

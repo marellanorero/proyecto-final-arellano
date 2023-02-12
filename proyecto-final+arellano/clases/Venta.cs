@@ -20,6 +20,10 @@ namespace proyecto_final_arellano.clases
             this.comentarios = comentarios;
         }
 
+        public Venta()
+        {
+        }
+
         public override bool Equals(object? obj)
         {
             return base.Equals(obj);

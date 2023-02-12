@@ -7,7 +7,6 @@ namespace Clase2_13_4095
     {
         static void Main(string[] args)
         {
-            Producto producto = ProductoHandler.ObtenerProductos(1);
 
         }
     }
