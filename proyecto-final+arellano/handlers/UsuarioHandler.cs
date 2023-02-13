@@ -1,6 +1,8 @@
 ﻿using proyecto_final_arellano.clases;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -41,34 +43,47 @@ namespace proyecto_final_arellano.handlers
             }
         }
 
-        public static bool Login(string nombreUsuario, string contraseña)
+        public Usuario Login(string user, string password)
         {
+            Usuario UsuarioTemporal = new Usuario();
             using (SqlConnection conn = new SqlConnection(cadenaConexion))
             {
-                SqlCommand comando = new SqlCommand("SELECT * FROM Usuario WHERE nombreUsuario = @nombreUsuario AND contraseña = @contraseña", conn);
+                SqlCommand comando = new SqlCommand("SELECT * FROM Usuario WHERE NombreUsuario = @user AND Contraseña = @password", conn);
 
-                conn.Open();
-
-                SqlDataReader reader = comando.ExecuteReader();
-                if (reader.HasRows)
+                try
                 {
-                    while (reader.Read())
+                    comando.Parameters.AddWithValue("@user", user);
+                    comando.Parameters.AddWithValue("@password", password);
+
+                    conn.Open();
+
+                    SqlDataReader reader = comando.ExecuteReader();
+                    if (reader.HasRows)
                     {
-                        Usuario usuario = new Usuario();
-                        usuario.Id = reader.GetInt64(0);
-                        usuario.Nombre = reader.GetString(1);
-                        usuario.Apellido = reader.GetString(2);
-                        usuario.Mail = reader.GetString(5);
-                        usuario.NombreUsuario = reader.GetString(3);
-                        usuario.Contraseña = reader.GetString(4);
+                        reader.Read();
+                        UsuarioTemporal.Id = reader.GetInt64(0);
+                        UsuarioTemporal.Nombre = reader.GetString(1);
+                        UsuarioTemporal.Apellido = reader.GetString(2);
+                        UsuarioTemporal.Mail = reader.GetString(5);
+                        UsuarioTemporal.NombreUsuario = reader.GetString(3);
+                        UsuarioTemporal.Contraseña = reader.GetString(4);
+                       
                     }
+                    return UsuarioTemporal;
                 }
-                else
+                catch (Exception ex)
                 {
-                    return false;
+                    throw ex;
+                }
+                finally
+                {
+                    if (conn.State == ConnectionState.Open)
+                    {
+                        conn.Close();
+                    }
                 }
             }
         }
     }
-}
+    }
 
